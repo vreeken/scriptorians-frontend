@@ -82,7 +82,7 @@ export default {
 		},
 		fetchScripturesJSON: function() {
 			const _this = this;
-			this.$axios({ url: 'statics/scriptures.json', baseURL: '' })
+			this.$axios.get(this.$urls.json.scriptures)
 				.then(function(response) {
 					if (response.data) {
 						_this.$store.commit('setScripturesJson', response.data);
@@ -103,7 +103,7 @@ export default {
 		},
 		fetchScripturesSummaryJSON: function() {
 			const _this = this;
-			this.$axios({ url: 'statics/scriptures_summary.json', baseURL: '' })
+			this.$axios.get(this.$urls.json.scriptures_summary)
 				.then(function(response) {
 					if (response.data) {
 						_this.$store.commit('setScripturesSummaryJson', response.data);
