@@ -1,6 +1,6 @@
 <template>
 	<div class="comment-block">
-		<comment-new :replyToComment="null" @onSubmitCommentSuccess="replyToComment=false" @onSubmitCommentCancel="replyToComment=false"></comment-new>
+		<comment-new :parentComment="null" @onSubmitCommentSuccess="replyToComment=false" @onSubmitCommentCancel="replyToComment=false"></comment-new>
 		<comment-list :comments="comments"></comment-list>
 	</div>
 </template>

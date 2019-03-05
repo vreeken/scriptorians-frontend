@@ -22,16 +22,16 @@
 					</div>
 					<div>
 						<span class="comment-reply-btn fake-link" @click="replyToComment == comment ? replyToComment=false : replyToComment=comment">&nbsp;Reply</span>
-						<span v-if="comment.username==me">
+						<span v-if="comment.username===me.username">
 							&nbsp;&bull;&nbsp;<span class="comment-edit-btn fake-link" @click="editComment == comment ? editComment=false : editComment=comment">Edit</span>
 						</span>
 					</div>
 				</div>
 			</div>
 		</div>
-		<comment-new v-if="replyToComment == comment" :comment="comment" :replyToComment="replyToComment" :postId="postId" @onSubmitCommentSuccess="replyToComment=false" @onSubmitCommentCancel="replyToComment=false"></comment-new>
+		<comment-new v-if="replyToComment == comment" :comment="comment" :parentComment="this" @onSubmitCommentSuccess="replyToComment=false" @onSubmitCommentCancel="replyToComment=false"></comment-new>
 		<comment-edit v-if="editComment == comment" :comment="comment" :editComment="editComment" @onEditSuccess="editComment=false" @onEditCancel="editComment=false"></comment-edit>
-		<comment-list v-if="comment.children.length" v-bind:comments="comment.children" :postId="postId"></comment-list>
+		<comment-list v-if="comment.children.length" v-bind:comments="comment.children"></comment-list>
 	</div>
 </template>
 
@@ -104,8 +104,12 @@ export default {
 	},
 	computed: {
 		me: function() {
-			return {};
-			// return this.$store.state.me;
+			if (this.$store.state.me && this.$store.state.me.username) {
+				return this.$store.state.me.username;
+			}
+			else {
+				return '';
+			}
 		}
 	}
 }

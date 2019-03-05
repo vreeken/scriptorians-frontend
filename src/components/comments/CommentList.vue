@@ -1,6 +1,6 @@
 <template>
 	<div class="comment-list">
-		<comment v-for="comment in comments" :key="comment.id" :comment="comment" :postId="postId"></comment>
+		<comment v-for="comment in comments" :key="comment.id" :comment="comment"></comment>
 	</div>
 </template>
 

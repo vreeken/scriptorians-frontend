@@ -2,12 +2,12 @@
 	<div>
 		<div class="field">
 			<div class="control">
-				<q-input v-model="newComment.body" :label="replyToComment ? 'Reply Comment' : 'New Top Level Comment'" outlined autogrow />
+				<q-input v-model="newComment.body" :label="parentComment ? 'Reply Comment' : 'New Top Level Comment'" outlined autogrow />
 				<!-- <textarea v-model="newComment.body" class="child-comment-body textarea" v-bind:class="{'error':newComment.bodyError}" type="text" placeholder="Comment" rows="2"></textarea> -->
 			</div>
 		</div>
 		<div class="comment-buttons">
-			<q-btn color="primary" icon-right="fas fa-arrow-right" @click="replyTo(comment)">Submit {{replyToComment ? replyToComment : 'Comment' }}</q-btn>
+			<q-btn color="primary" icon-right="fas fa-arrow-right" @click="replyTo(comment)">Submit {{parentComment ? parentComment : 'Comment' }}</q-btn>
 			<div class="button is-block is-dark is-large cancel-btn" @click="$emit('onReplyCancel');">Cancel</div>
 		</div>
 		<div class="error-field" v-if="newComment.ajaxError.length>0" v-html="newComment.ajaxError"></div>
@@ -25,7 +25,7 @@ export default {
 			}
 		}
 	},
-	props: ['comment', 'replyToComment'],
+	props: ['comment', 'parentComment'],
 	methods: {
 		// @onSubmitCommentCancel
 		// @onSubmitCommentSuccess
