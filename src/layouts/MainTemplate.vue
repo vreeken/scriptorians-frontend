@@ -212,8 +212,7 @@ export default {
 		}
 	},
 	mounted: function() {
-		// Override the default material icon used by quasar with the fontawesome version
-		this.$q.iconSet.arrow.dropdown = 'fas fa-caret-down';
+
 	},
 	methods: {
 		openURL

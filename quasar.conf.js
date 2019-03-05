@@ -41,6 +41,8 @@ module.exports = function (ctx) {
         'QItemSection',
         'QItemLabel',
         'QInput',
+        'QCheckbox',
+        'QToggle',
         'QBtnDropdown',
         'QAvatar',
         'QSpace',
@@ -59,9 +61,9 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: [
         'Notify'
-      ]
+      ],
 
-      // iconSet: 'ionicons-v4'
+      iconSet: 'fontawesome-v5'
       // lang: 'de' // Quasar language
     },
 
