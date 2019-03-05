@@ -9,6 +9,10 @@ export default async({ Vue }) => {
 			get: 'comments/get',
 			submit: 'comments/new',
 			vote: 'comments/vote'
+		},
+		auth: {
+			register: 'auth/register',
+			login: 'auth/login'
 		}
 	}
 }

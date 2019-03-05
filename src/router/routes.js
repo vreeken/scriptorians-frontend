@@ -27,6 +27,14 @@ const routes = [{
 				component: () => import('pages/scriptures/ChapterView.vue')
 			}
 		]
+	},
+	{
+		path: 'register',
+		component: () => import('pages/auth/RegisterView.vue')
+	},
+	{
+		path: 'login',
+		component: () => import('pages/auth/LoginView.vue')
 	}]
 }];
 
