@@ -21,7 +21,7 @@ export default {
 	data() {
 		return {
 			leftDrawerOpen: this.$q.platform.is.desktop,
-			scripturesJsonVersion: '0.3',
+			scripturesJsonVersion: '0.42',
 			childDataReady: false,
 			currRoute: null,
 			currChapterNumber: null,
@@ -52,9 +52,16 @@ export default {
 	methods: {
 		openURL,
 		setupScripturesJSON: function() {
+			// Caching of these files is set to one year in the .htaccess file
+			this.fetchScripturesJSON();
+			this.fetchScripturesSummaryJSON();
+
+			// These lines set up a cache for the scriptures.json object in a user's localstorage, but scriptures.json was too large
+			/*
 			const scripturesJsonVersion = localStorage.getItem('scriptures_json_version');
-			if (scripturesJsonVersion !== this.currentScripturesJsonVersion) {
-				// console.log('scriptures.json version out of date, fetching new version...');
+
+			if (scripturesJsonVersion !== this.scripturesJsonVersion) {
+				console.log('scriptures.json version out of date, fetching new version...');
 				this.fetchScripturesJSON();
 				this.fetchScripturesSummaryJSON();
 				return;
@@ -62,23 +69,24 @@ export default {
 
 			const scripturesJson = localStorage.getItem('scriptures_json');
 			if (scripturesJson === null) {
-				// console.log('scriptures.json NOT found in localStorage, fetching...');
+				console.log('scriptures.json NOT found in localStorage, fetching...');
 				this.fetchScripturesJSON();
 			}
 			else {
-				// console.log('using current version scriptures.json found in localStorage');
-				this.$store.commit('setScripturesJson', scripturesJson);
+				console.log('using current version scriptures.json found in localStorage');
+				this.$store.commit('setScripturesJson', JSON.parse(scripturesJson));
 			}
 
 			const scripturesSummaryJson = localStorage.getItem('scriptures_summary_json');
 			if (scripturesSummaryJson === null) {
-				// console.log('scriptures.json NOT found in localStorage, fetching...');
+				console.log('scriptures_summary.json NOT found in localStorage, fetching...');
 				this.fetchScripturesJSON();
 			}
 			else {
-				// console.log('using current version scriptures.json found in localStorage');
-				this.$store.commit('setScripturesSummaryJson', scripturesSummaryJson);
+				console.log('using current version scriptures_summary.json found in localStorage');
+				this.$store.commit('setScripturesSummaryJson', JSON.parse(scripturesSummaryJson));
 			}
+			*/
 		},
 		fetchScripturesJSON: function() {
 			const _this = this;
@@ -86,8 +94,8 @@ export default {
 				.then(function(response) {
 					if (response.data) {
 						_this.$store.commit('setScripturesJson', response.data);
-						localStorage.setItem('scriptures_json', response.data);
-						localStorage.setItem('scriptures_json_version', _this.scripturesJsonVersion);
+						// localStorage.setItem('scriptures_json', JSON.stringify(response.data));
+						// localStorage.setItem('scriptures_json_version', _this.scripturesJsonVersion);
 						// console.log('scriptures.json downloaded from server and saved to localStorage');
 					}
 					else {
@@ -107,8 +115,8 @@ export default {
 				.then(function(response) {
 					if (response.data) {
 						_this.$store.commit('setScripturesSummaryJson', response.data);
-						localStorage.setItem('scriptures_summary_json', response.data);
-						localStorage.setItem('scriptures_json_version', _this.scripturesJsonVersion);
+						// localStorage.setItem('scriptures_summary_json', JSON.stringify(response.data));
+						// localStorage.setItem('scriptures_json_version', _this.scripturesJsonVersion);
 						// console.log('scriptures.json downloaded from server and saved to localStorage');
 					}
 					else {

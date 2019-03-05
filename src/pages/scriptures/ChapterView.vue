@@ -27,10 +27,25 @@ export default {
 		}
 	},
 	mounted: function() {
-		for (let i = 0; i < this.chapter.verses.length; i++) {
-			this.verses.push({ num: i + 1, text: this.chapter.verses[i], comments: [] });
+		// Check if we're coming back here and already have chapterData and restore it if we do
+		if (this.$store.state.chapterData && this.$store.state.chapterData.vbcId === this.vbcId) {
+			console.log('state found');
+			// Restore our verses data (which also includes any comments each verse has)
+			this.verses = this.$store.state.chapterData.verses;
 		}
-		this.fetchComments();
+		else {
+			console.log('state NOT found');
+			// Clear any existing chapterData from a different chapter
+			this.$store.state.chapterData = null;
+
+			// Get all of the appropriate verses and push to our array
+			for (let i = 0; i < this.chapter.verses.length; i++) {
+				this.verses.push({ num: i + 1, text: this.chapter.verses[i], comments: [] });
+			}
+
+			// And get any comments from the server
+			this.fetchComments();
+		}
 	},
 	methods: {
 		fetchComments: function() {
@@ -87,36 +102,25 @@ export default {
 				}
 			});
 
-			/*
-			// This recursive method assigns a "depth" property to each comment
-			// The "depth" property is currently just used for DOM formatting
-			const processLoop = function(parent) {
-				let _this = this;
-				parent.children.forEach(function(c) {
-					c.depth = parent.depth + 1;
-					if (c.children.length) {
-						_this.processLoop(c);
-					}
-				});
-			}
-
-			// Assign a "depth" value to each comment using recursion to get all children
-			for (let i = 0; i < roots.length; i++) {
-				// root parents have a depth of 0
-				roots[i].depth = 0;
-				// Loop through each child and give it a depth
-				processLoop(roots[i]);
-			}
-			*/
-
-			// Add each root (comment without a parent) to the appropriate verse object
+			// Add each root (a comment without a parent) to the corresponding verse object
 			for (let i = 0; i < roots.length; i++) {
 				this.verses[roots[i].verse_id - 1].comments.push(roots[i]);
 			}
+
+			// Do any comment sorting here (newest, top, etc)
 		}
 	},
+	beforeDestroy: function() {
+		this.$store.commit('setChapterData', {
+			vbcId: this.vbcId,
+			verses: this.verses
+		});
+	},
 	computed: {
-
+		// A unique to each chapter identifier used to restore state data upon returning to this chapter
+		vbcId: function() {
+			return this.volume.id + ',' + this.book.id + ',' + this.currChapterNumber;
+		}
 	}
 }
 </script>

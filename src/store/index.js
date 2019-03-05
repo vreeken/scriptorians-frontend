@@ -19,7 +19,8 @@ export default function(/* { ssrContext } */) {
 			currBook: null,
 			currChapter: null,
 			currVerse: null,
-			currComment: null
+			currComment: null,
+			chapterData: null
 		},
 		mutations: {
 			setScripturesJson(state, json) {
@@ -27,6 +28,9 @@ export default function(/* { ssrContext } */) {
 			},
 			setScripturesSummaryJson(state, json) {
 				state.scripturesSummary = json;
+			},
+			setChapterData(state, o) {
+				state.chapterData = o;
 			},
 			login(state, json) {
 
