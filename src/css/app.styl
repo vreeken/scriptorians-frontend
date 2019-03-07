@@ -7,6 +7,10 @@ body {
 	color: #111;
 }
 
+.full-row {
+	width: 100%;
+}
+
 .header-font {
 	font-family: 'Fugaz One', sans-serif;
 }
@@ -36,12 +40,7 @@ body {
 }
 .registration-form {
 	width: 92%;
-	max-width: 450px;
-}
-
-
-.flexgrow {
-	flex: 1;
+	max-width: 500px !important;
 }
 
 .svg-white {
@@ -53,6 +52,12 @@ body {
 
 @media (max-width: 767px) {
 	.lt-tablet-hide {
+    	display: none !important;
+    }
+}
+
+@media (max-width: 1023px) {
+	.lt-sm-hide {
     	display: none !important;
     }
 }

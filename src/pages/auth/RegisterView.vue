@@ -1,22 +1,50 @@
 <template>
-	<q-page class="flex flex-center">
-		<div class="q-pa-md bg-blue-grey-1 shadow-3 registration-form shadow-transition">
-			<div class="q-gutter-y-md column">
-				<div class="registration-title header-font">Register</div>
+	<q-page class="flex content-center">
+		<div class="row full-row justify-center">
+			<div class="q-pa-md q-ma-md bg-blue-grey-1 shadow-3 registration-form col-md-8">
+				<div class="q-gutter-y-md column">
+					<div class="registration-title header-font text-primary">Register</div>
 
-				<form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
-					<q-input ref="username" v-model="username" label="Username" lazy-rules :rules="[ val => val && val.length > 0 || 'Please choose a Username']" />
-					<q-input ref="email" v-model="email" label="Email" type="email" lazy-rules :rules="[ val => val && val.indexOf('.')>0 && val.indexOf('@')>0 && val.indexOf('.') < val.length-1 || 'Please use a valid email' ]" />
-					<q-input ref="password" v-model="password" label="Password" type="password" lazy-rules :rules="[ val => val && val.length >= 6 || 'Your password must be at least 6 characters']" />
+					<form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
+						<q-input ref="username" v-model="username" label="Username" lazy-rules :rules="[ val => val && val.length > 0 || 'Please choose a Username']">
+							<template v-slot:prepend><q-icon name="fas fa-user" /></template>
+						</q-input>
+						<q-input ref="email" v-model="email" label="Email" type="email" lazy-rules :rules="[ val => val && val.indexOf('.')>0 && val.indexOf('@')>0 && val.indexOf('.') < val.length-1 || 'Please use a valid email' ]">
+							<template v-slot:prepend><q-icon name="fas fa-at" /></template>
+						</q-input>
+						<q-input ref="password" v-model="password" label="Password" type="password" lazy-rules :rules="[ val => val && val.length >= 6 || 'Your password must be at least 6 characters']">
+							<template v-slot:prepend><q-icon name="fas fa-key" /></template>
+						</q-input>
 
-					<q-toggle v-model="terms" label="I agree to the terms and conditions" />
+						<q-toggle v-model="terms" label="I agree to the terms and conditions" />
 
-					<div class="flex">
-						<q-btn class="flexgrow" label="Register" type="submit" color="primary" />
-						<q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
-					</div>
-				</form>
+						<div class="flex">
+							<q-btn class="col-grow" label="Register" type="submit" color="primary" />
+							<q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+						</div>
+					</form>
 
+				</div>
+			</div>
+			<div class="q-pa-md q-ma-md bg-blue-grey-1 shadow-3 registration-form col-md-4 lt-sm-hide">
+				<div class="q-gutter-y-md column">
+					<div class="registration-title header-font text-primary">Member Benefits</div>
+
+					Reading the scriptures and viewing user comments is available to everyone, but here's what registered users also get:
+					<ul>
+						<li>Vote on user comments</li>
+						<li>Submit your own comments</li>
+						<li>Personal notes</li>
+						<li>Personal Bookmarks</li>
+						<li>Track your reading progress</li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+		<div class="row full-row flex flex-center">
+			<div>
+				Already have an account? <q-btn color="secondary" label="Login" to="login" />
 			</div>
 		</div>
 	</q-page>
