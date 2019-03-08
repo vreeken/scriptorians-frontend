@@ -76,9 +76,10 @@
 					<q-separator dark vertical />
 					<q-btn stretch flat label="Gospel Questions" to="/questions" />
 					<q-separator dark vertical />
-					<q-btn stretch flat label="Login" to="/login" />
-					<q-separator dark vertical />
-					<q-btn stretch flat label="Register" to="/register" />
+					<q-btn v-if="!$store.state.logged_in" stretch flat label="Login" to="/login" />
+					<q-separator v-if="!$store.state.logged_in" dark vertical />
+					<q-btn v-if="!$store.state.logged_in" stretch flat label="Register" to="/register" />
+					<q-btn v-if="$store.state.logged_in" stretch flat label="Logout" to="/logout" />
 				</div>
 
 			</q-toolbar>
@@ -173,7 +174,7 @@
 					</q-item-section>
 				</q-item>
 
-				<q-item clickable tag="a" to="/login">
+				<q-item v-if="!$store.state.logged_in" clickable tag="a" to="/login">
 					<q-item-section avatar>
 						<!--<q-icon name="fas fa-sign-in-alt" />-->
 						<q-icon name="fas fa-user-check" />
@@ -183,13 +184,21 @@
 						<q-item-label caption>To an Existing Account</q-item-label>
 					</q-item-section>
 				</q-item>
-				<q-item clickable tag="a" to="/register">
+				<q-item v-if="!$store.state.logged_in" clickable tag="a" to="/register">
 					<q-item-section avatar>
 						<q-icon name="fas fa-user-plus" />
 					</q-item-section>
 					<q-item-section>
 						<q-item-label>Register</q-item-label>
 						<q-item-label caption>Create a New Account</q-item-label>
+					</q-item-section>
+				</q-item>
+				<q-item v-if="$store.state.logged_in" clickable tag="a" to="/logout">
+					<q-item-section avatar>
+						<q-icon name="fas fa-sign-out-alt" />
+					</q-item-section>
+					<q-item-section>
+						<q-item-label>Logout</q-item-label>
 					</q-item-section>
 				</q-item>
 			</q-list>
