@@ -59,33 +59,86 @@ export default {
 	props: [],
 	data() {
 		return {
+			username: null,
+			email: null,
+			password: null,
+			remember: false
 		}
 	},
 	mounted: function() {
 
 	},
 	methods: {
-		singleChapterReplaceState: function() {
-			// Skip showing the list of chapters because there's only one, go to that only chapter
-			this.$router.replace(this.book.url + '/1');
+		onSubmit: function() {
+			this.usernameInUse = false;
+			this.emailInUse = false;
+			this.$refs.username.validate();
+			this.$refs.email.validate();
+			this.$refs.password.validate();
+
+			if (this.$refs.username.hasError || this.$refs.email.hasError || this.$refs.password.hasError) {
+				this.formHasError = true;
+			}
+			else if (this.terms !== true) {
+				this.$q.notify({
+					icon: 'fas fa-exclamation',
+					color: 'negative',
+					message: 'You need to agree to the terms and conditions'
+				});
+			}
+			else {
+				this.ajaxRegister();
+			}
+		},
+		ajaxRegister: function() {
+			const _this = this;
+			this.$axios.post(this.$urls.auth.login, {
+				username: this.username,
+				password: this.password,
+				remember: this.remember
+			}, window.config)
+				.then(function(response) {
+					if (response.data && response.data.success && response.data.userdata) {
+						_this.$store.commit('login', response.data.userdata);
+						_this.$q.notify({
+							icon: 'fas fa-check',
+							color: 'positive',
+							message: 'Logged in successfully.'
+						});
+						if (_this.$store.state.redirectRoute) {
+							const route = _this.$store.state.redirectRoute;
+							_this.$store.commit('clearRedirectRoute');
+							_this.$router.push(route);
+						}
+					}
+					else {
+						_this.$q.notify({
+							icon: 'far fa-frown',
+							color: 'negative',
+							message: 'Invalid username or password.'
+						});
+					}
+				})
+				.catch(function() {
+					_this.$q.notify({
+						icon: 'far fa-frown',
+						color: 'negative',
+						message: 'Invalid username or password.'
+					});
+				});
+		},
+		onReset: function() {
+			this.username = null;
+			this.email = null;
+			this.password = null;
+
+			this.$refs.username.resetValidation();
+			this.$refs.email.resetValidation();
+			this.$refs.password.resetValidation();
 		}
 	},
 	computed: {
-		num_chapters: function() {
-			if (this.book === null) {
-				return 0;
-			}
-			if (this.book.num_chapters === 1) {
-				this.singleChapterReplaceState();
-			}
-			return this.book.num_chapters;
-		},
-		fullPath: function() {
-			// This forces a trailing slash onto our url path
-			// Since a user can enter our SPA at any location with or without a trailing slash on the url
-			// We have to make this consistent
-			return this.$route.fullPath.slice(-1) === '/' ? this.$route.fullPath : this.$route.fullPath + '/';
-		}
+
 	}
 }
 </script>
