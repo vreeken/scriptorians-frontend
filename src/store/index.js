@@ -20,7 +20,8 @@ export default function(/* { ssrContext } */) {
 			currChapter: null,
 			currVerse: null,
 			currComment: null,
-			chapterData: null
+			chapterData: null,
+			redirectRoute: null
 		},
 		mutations: {
 			setScripturesJson(state, json) {
@@ -33,7 +34,25 @@ export default function(/* { ssrContext } */) {
 				state.chapterData = o;
 			},
 			login(state, json) {
-
+				console.log(json);
+				if (json.token && json.username && json.user_id) {
+					state.logged_in = true;
+					state.me = {
+						username: json.username,
+						token: json.token,
+						user_id: json.user_id,
+						email: json.email
+					}
+					console.log('logged in as ' + json.username + ', with token: ' + json.token);
+					return true;
+				}
+				return false;
+			},
+			redirectRoute(state, route) {
+				state.redirectRoute = route;
+			},
+			clearRedirectRoute(state) {
+				state.redirectRoute = null;
 			},
 			setCurrVolume(state, o) {
 				state.currVolume = o;
@@ -51,7 +70,10 @@ export default function(/* { ssrContext } */) {
 				state.currComment = o;
 			}
 		}
-	})
+	});
+
+	// Make store accessible from window, mainly for within our router dealing with beforeEach()
+	window.Store = store;
 
 	return store
 }
