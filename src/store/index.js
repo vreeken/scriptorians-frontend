@@ -43,7 +43,9 @@ export default function(/* { ssrContext } */) {
 						user_id: json.user_id,
 						email: json.email
 					}
+					localStorage.setItem('token', json.token);
 					console.log('logged in as ' + json.username + ', with token: ' + json.token);
+
 					return true;
 				}
 				return false;

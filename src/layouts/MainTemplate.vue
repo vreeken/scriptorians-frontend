@@ -1,6 +1,6 @@
 <template>
 	<q-layout view="lHh Lpr lFf">
-		<q-header elevated class="">
+		<q-header elevated>
 			<q-toolbar>
 				<q-btn
 					flat
@@ -201,6 +201,14 @@
 						<q-item-label>Logout</q-item-label>
 					</q-item-section>
 				</q-item>
+				<q-item clickable @click="testAccount()">
+					<q-item-section avatar>
+						<q-icon name="fas fa-sign-out-alt" />
+					</q-item-section>
+					<q-item-section>
+						<q-item-label>Test Account</q-item-label>
+					</q-item-section>
+				</q-item>
 			</q-list>
 		</q-drawer>
 
@@ -221,10 +229,62 @@ export default {
 		}
 	},
 	mounted: function() {
+		const token = localStorage.getItem('token');
+		if (token !== null) {
+			console.log('has saved token');
+			// Save jwt token to default headers for axios calls
+			this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
+			this.getUserData();
+		}
+		else {
+			console.log('doesnt have saved token');
+		}
 	},
 	methods: {
-		openURL
+		openURL,
+		getUserData: function() {
+			const _this = this;
+			this.$axios.get(this.$urls.auth.userdata)
+				.then(function(response) {
+					console.log(response);
+					console.log(response.data);
+					if (response && response.data && response.data.userdata) {
+						console.log('valid token, saving user data');
+						_this.$store.commit('login', response.data.userdata);
+					}
+					else {
+						console.log('invalid saved token, removing');
+						_this.$axios.defaults.headers.common['Authorization'] = '';
+						localStorage.removeItem('token');
+					}
+				})
+				.catch(function() {
+					console.log('invalid saved token, removing');
+					_this.$axios.defaults.headers.common['Authorization'] = '';
+					localStorage.removeItem('token');
+				});
+		},
+		testAccount: function() {
+			const _this = this;
+			this.$axios.get('http://scriptorians.test/api/account-data', {
+				username: this.username,
+				password: this.password,
+				remember: this.remember
+			}, window.config)
+				.then(function(response) {
+					console.log(response);
+					console.log(response.data);
+				})
+				.catch(function(error) {
+					console.log(error.response);
+					_this.$q.notify({
+						icon: 'far fa-frown',
+						color: 'negative',
+						message: 'Invalid username or password.'
+					});
+				});
+		}
 	}
 }
 </script>

@@ -15,7 +15,8 @@ export default async({ Vue }) => {
 		},
 		auth: {
 			register: apiBase + 'auth/register',
-			login: apiBase + 'auth/login'
+			login: apiBase + 'auth/login',
+			userdata: apiBase + 'auth/userdata'
 		}
 	}
 }

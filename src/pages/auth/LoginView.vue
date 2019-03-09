@@ -6,10 +6,10 @@
 					<div class="registration-title header-font text-primary">Login</div>
 
 					<form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
-						<q-input ref="username" v-model="username" label="Username" lazy-rules :rules="[ val => val && val.length > 0 || 'Please choose a Username']">
+						<q-input ref="username" v-model="username" label="Username" lazy-rules :rules="[ val => val && val.length > 0 || 'Please input your Username']">
 							<template v-slot:prepend><q-icon name="fas fa-user" /></template>
 						</q-input>
-						<q-input ref="password" v-model="password" label="Password" type="password" lazy-rules :rules="[ val => val && val.length >= 6 || 'Your password must be at least 6 characters']">
+						<q-input ref="password" v-model="password" label="Password" type="password" lazy-rules :rules="[ val => val && val.length >= 6 || 'Please input your password']">
 							<template v-slot:prepend><q-icon name="fas fa-key" /></template>
 						</q-input>
 
@@ -60,7 +60,6 @@ export default {
 	data() {
 		return {
 			username: null,
-			email: null,
 			password: null,
 			remember: false
 		}
@@ -70,27 +69,17 @@ export default {
 	},
 	methods: {
 		onSubmit: function() {
-			this.usernameInUse = false;
-			this.emailInUse = false;
 			this.$refs.username.validate();
-			this.$refs.email.validate();
 			this.$refs.password.validate();
 
-			if (this.$refs.username.hasError || this.$refs.email.hasError || this.$refs.password.hasError) {
+			if (this.$refs.username.hasError || this.$refs.password.hasError) {
 				this.formHasError = true;
 			}
-			else if (this.terms !== true) {
-				this.$q.notify({
-					icon: 'fas fa-exclamation',
-					color: 'negative',
-					message: 'You need to agree to the terms and conditions'
-				});
-			}
 			else {
-				this.ajaxRegister();
+				this.ajaxLogin();
 			}
 		},
-		ajaxRegister: function() {
+		ajaxLogin: function() {
 			const _this = this;
 			this.$axios.post(this.$urls.auth.login, {
 				username: this.username,
@@ -98,8 +87,14 @@ export default {
 				remember: this.remember
 			}, window.config)
 				.then(function(response) {
+					console.log(response);
+					console.log(response.data);
 					if (response.data && response.data.success && response.data.userdata) {
 						_this.$store.commit('login', response.data.userdata);
+
+						// Save jwt token to default headers for axios calls
+						_this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.userdata.token;
+
 						_this.$q.notify({
 							icon: 'fas fa-check',
 							color: 'positive',
@@ -119,7 +114,10 @@ export default {
 						});
 					}
 				})
-				.catch(function() {
+				.catch(function(error) {
+					console.log(error);
+					console.log(error.response);
+					console.log(error.response.data);
 					_this.$q.notify({
 						icon: 'far fa-frown',
 						color: 'negative',
@@ -129,11 +127,9 @@ export default {
 		},
 		onReset: function() {
 			this.username = null;
-			this.email = null;
 			this.password = null;
 
 			this.$refs.username.resetValidation();
-			this.$refs.email.resetValidation();
 			this.$refs.password.resetValidation();
 		}
 	},
