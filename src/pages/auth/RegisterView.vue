@@ -106,9 +106,8 @@ export default {
 				.then(function(response) {
 					if (response.data && response.data.success && response.data.userdata) {
 						_this.$store.commit('login', response.data.userdata);
-
 						// Save jwt token to default headers for axios calls
-						_this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.userdata.token;
+						// _this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.userdata.token;
 
 						_this.$q.notify({
 							icon: 'fas fa-check',
