@@ -12,7 +12,7 @@ export default function(/* { ssrContext } */) {
 	const store = new Vuex.Store({
 		state: {
 			logged_in: false,
-			me: null,
+			user: null,
 			scriptures: [],
 			scripturesSummary: [],
 			currVolume: null,
@@ -34,21 +34,23 @@ export default function(/* { ssrContext } */) {
 				state.chapterData = o;
 			},
 			login(state, json) {
-				console.log(json);
-				if (json.token && json.username && json.user_id) {
+				if (json && json.username && json.user_id) {
 					state.logged_in = true;
-					state.me = {
+					state.user = {
 						username: json.username,
-						token: json.token,
 						user_id: json.user_id,
 						email: json.email
 					}
-					localStorage.setItem('token', json.token);
-					console.log('logged in as ' + json.username + ', with token: ' + json.token);
+					console.log('logged in as ' + json.username);
 
 					return true;
 				}
 				return false;
+			},
+			logout(state) {
+				state.user = null;
+				state.logged_in = false;
+				console.log('logged out');
 			},
 			redirectRoute(state, route) {
 				state.redirectRoute = route;
