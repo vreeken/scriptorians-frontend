@@ -79,7 +79,7 @@
 					<q-btn v-if="!$store.state.logged_in" stretch flat label="Login" to="/login" />
 					<q-separator v-if="!$store.state.logged_in" dark vertical />
 					<q-btn v-if="!$store.state.logged_in" stretch flat label="Register" to="/register" />
-					<q-btn v-if="$store.state.logged_in" stretch flat label="Logout" to="/logout" />
+					<q-btn v-if="$store.state.logged_in" stretch flat label="Logout" @click="logout()" />
 				</div>
 
 			</q-toolbar>
@@ -193,7 +193,7 @@
 						<q-item-label caption>Create a New Account</q-item-label>
 					</q-item-section>
 				</q-item>
-				<q-item v-if="$store.state.logged_in" clickable tag="a" to="/logout">
+				<q-item v-if="$store.state.logged_in" clickable tag="a" @click="logout()">
 					<q-item-section avatar>
 						<q-icon name="fas fa-sign-out-alt" />
 					</q-item-section>
@@ -229,6 +229,7 @@ export default {
 		}
 	},
 	mounted: function() {
+		/*
 		const token = localStorage.getItem('token');
 		if (token !== null) {
 			console.log('has saved token');
@@ -240,38 +241,70 @@ export default {
 		else {
 			console.log('doesnt have saved token');
 		}
+		*/
+
+		// We have some app-wide utility methods so make this instance accessible
+		window.rootVue = this;
+
+		if (window.USERDATA !== null) {
+			this.$store.commit('login', window.USERDATA);
+		}
 	},
 	methods: {
 		openURL,
-		getUserData: function() {
+		showError: function(msg) {
+			this.$q.notify({
+				icon: 'far fa-frown',
+				color: 'negative',
+				message: msg
+			});
+		},
+		showSuccess: function(msg) {
+			this.$q.notify({
+				icon: 'fas fa-check',
+				color: 'positive',
+				message: msg
+			});
+		},
+		showMessage: function(msg) {
+			this.$q.notify({
+				icon: 'fas fa-info',
+				color: 'info',
+				message: msg
+			});
+		},
+		logout: function() {
 			const _this = this;
 			this.$axios.get(this.$urls.auth.userdata)
 				.then(function(response) {
-					console.log(response);
-					console.log(response.data);
-					if (response && response.data && response.data.userdata) {
-						console.log('valid token, saving user data');
-						_this.$store.commit('login', response.data.userdata);
+					if (response && response.data && response.data.success) {
+						_this.$store.commit('logout');
+						_this.$q.notify({
+							icon: 'fas fa-check',
+							color: 'positive',
+							message: 'You have been logged out.'
+						});
+						_this.$router.push('/');
 					}
 					else {
-						console.log('invalid saved token, removing');
-						_this.$axios.defaults.headers.common['Authorization'] = '';
-						localStorage.removeItem('token');
+						_this.$q.notify({
+							icon: 'far fa-frown',
+							color: 'negative',
+							message: 'Failed to log out. Please try again.'
+						});
 					}
 				})
 				.catch(function() {
-					console.log('invalid saved token, removing');
-					_this.$axios.defaults.headers.common['Authorization'] = '';
-					localStorage.removeItem('token');
+					_this.$q.notify({
+						icon: 'far fa-frown',
+						color: 'negative',
+						message: 'Failed to log out. Please try again.'
+					});
 				});
 		},
 		testAccount: function() {
 			const _this = this;
-			this.$axios.get('http://scriptorians.test/api/account-data', {
-				username: this.username,
-				password: this.password,
-				remember: this.remember
-			}, window.config)
+			this.$axios.get('http://scriptorians.test/api/account-data')
 				.then(function(response) {
 					console.log(response);
 					console.log(response.data);
