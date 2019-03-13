@@ -1,5 +1,6 @@
 Create symbolic links for each the dist/spa/js, css, fonts, statics to laravel/public folder
-Create symbolic link for dist/spa/index.html to laravel/resources/views/<view_name>.php (note the change in file extension to .php)
+Create symbolic link for dist/spa/index.html to laravel/resources/views/<view_name>.blade.php (note the change in file extension to .php AND ".blade" if necessary)
+C:\laragon\www\scriptorians-frontend\node_modules\@quasar\app\lib
 
 Install Watch: $ npm install watch --save-dev
 In package.json, under scripts:
