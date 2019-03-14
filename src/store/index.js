@@ -11,13 +11,17 @@ Vue.use(Vuex)
 export default function(/* { ssrContext } */) {
 	const store = new Vuex.Store({
 		state: {
-			logged_in: false,
-			user: null,
+			logged_in: true,
+			user: {
+				username: 'Bob',
+				user_id: 1,
+				email: 'svenjoypro@gmail.com'
+			},
 			scriptures: [],
 			scripturesSummary: [],
 			currVolume: null,
 			currBook: null,
-			currChapter: null,
+			currChapterNumber: null,
 			currVerse: null,
 			currComment: null,
 			chapterData: null,
@@ -32,6 +36,11 @@ export default function(/* { ssrContext } */) {
 			},
 			setChapterData(state, o) {
 				state.chapterData = o;
+			},
+			setVBC(state, o) {
+				state.currVolume = o.v;
+				state.currBook = o.b;
+				state.currChapterNumber = o.c;
 			},
 			login(state, json) {
 				if (json && json.username && json.user_id) {

@@ -27,14 +27,18 @@ export default {
 		}
 	},
 	mounted: function() {
+		this.$store.commit('setVBC', {
+			v: this.volume,
+			b: this.book,
+			c: this.currChapterNumber
+		});
+
 		// Check if we're coming back here and already have chapterData and restore it if we do
 		if (this.$store.state.chapterData && this.$store.state.chapterData.vbcId === this.vbcId) {
-			console.log('state found');
 			// Restore our verses data (which also includes any comments each verse has)
 			this.verses = this.$store.state.chapterData.verses;
 		}
 		else {
-			console.log('state NOT found');
 			// Clear any existing chapterData from a different chapter
 			this.$store.state.chapterData = null;
 
@@ -50,24 +54,23 @@ export default {
 	methods: {
 		fetchComments: function() {
 			const _this = this;
+
 			this.$axios.post(this.$urls.comments.get, {
-				v: this.volume.id,
-				b: this.book.id,
-				c: this.currChapterNumber
-			}, window.config)
+				volume: this.volume.id,
+				book: this.book.id,
+				chapter: this.currChapterNumber
+			})
 				.then(function(response) {
 					if (response.data && response.data.success) {
 						_this.processComments(response.data.comments);
 					}
 					else {
-						// TODO handle this error
-						console.log('Error');
-						console.log(response);
-						console.log(response.data);
+						window.rootVue.showError('Failed to retrieve comments. Please try again later.');
 					}
 				})
 				.catch(function(error) {
 					console.log(error);
+					window.rootVue.showError('Failed to retrieve comments. Please try again later.');
 				});
 		},
 		processComments: function(c) {
