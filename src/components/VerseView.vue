@@ -3,7 +3,7 @@
 		<div class="scripture-font" v-touch-hold.mouse="toggleOptions">
 			<span @click="toggleOptions">{{ verse.num }}</span>&nbsp;<span>{{ verse.text }}</span>
 		</div>
-		<comment-block v-if="showingComments" :comments="verse.comments"></comment-block>
+		<comment-block v-if="showingComments" :comments="verse.comments" :verseId="verse.num"></comment-block>
 		<!--
 		<div class="new-comment">
 			<div class="error-field" v-if="newComment.bodyError.length>0" v-html="newComment.bodyError"></div>

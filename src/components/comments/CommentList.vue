@@ -1,6 +1,6 @@
 <template>
 	<div class="comment-list">
-		<comment v-for="comment in comments" :key="comment.id" :comment="comment"></comment>
+		<comment v-for="comment in comments" :key="comment.id" :comment="comment" :verseId="verseId"></comment>
 	</div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
 
 		}
 	},
-	props: ['comments'],
+	props: ['comments', 'verseId'],
 	methods: {
 
 	},
