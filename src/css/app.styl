@@ -61,6 +61,7 @@ body {
 	width: 100%;
 }
 .comment-group {
+	position: relative;
     margin-top: 10px;
     border-width: 1px;
     border-style: solid;
@@ -83,6 +84,78 @@ body {
 }
 .cg4 {
 	background-color: #fffaed !important;
+}
+.left-border-btn {
+	position: absolute;
+	left: -1px;
+	top: -1px;
+	width: 5px;
+	height: calc(100% + 2px);
+	cursor: pointer;
+	border-radius: 5px 0 0 5px;
+}
+/*
+TODO refactor out each color, then also add hover colors
+ */
+.cg0 .left-border-btn {
+	background-color: #33A4FF;
+}
+.cg1 .left-border-btn {
+	background-color: #FF3333;
+}
+.cg2 .left-border-btn {
+	background-color: #33FF5F;
+}
+.cg3 .left-border-btn {
+	background-color: #D333FF;
+}
+.cg4 .left-border-btn {
+	background-color: #FFC533;
+}
+
+.bottom-border-minimized-children {
+	position: absolute;
+	left: -1px;
+	bottom: -1px;
+	width: calc(100% + 2px);
+	height: 12px;
+	cursor: pointer;
+	border-radius: 0 0 5px 5px;
+	overflow: hidden;
+}
+.bottom-border-minimized-children > div {
+	color: #FFF;
+	font-size: 3rem;
+	position: relative;
+	top: -44px;
+	width: 100%;
+	text-align: center;
+	pointer-events: none;
+}
+.cg0 .bottom-border-minimized-children {
+	background-color: #33A4FF;
+}
+.cg1 .bottom-border-minimized-children {
+	background-color: #FF3333;
+}
+.cg2 .bottom-border-minimized-children {
+	background-color: #33FF5F;
+}
+.cg3 .bottom-border-minimized-children {
+	background-color: #D333FF;
+}
+.cg4 .bottom-border-minimized-children {
+	background-color: #FFC533;
+}
+
+.verse-container {
+	margin-bottom: .7rem;
+}
+.verse-number {
+	cursor: pointer;
+}
+.verse-number.has-comments {
+	color: #f00;
 }
 
 .vote-btn {

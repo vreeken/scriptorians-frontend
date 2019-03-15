@@ -1,9 +1,24 @@
 <template>
-	<div>
+	<div class="verse-container">
 		<div class="scripture-font" v-touch-hold.mouse="toggleOptions">
-			<span @click="toggleOptions">{{ verse.num }}</span>&nbsp;<span>{{ verse.text }}</span>
+			<span @click="toggleOptions" class="verse-number" v-bind:class="{'has-comments':verse.comments.length}">{{ verse.num }}</span>&nbsp;<span>{{ verse.text }}</span>
 		</div>
-		<comment-block v-if="showingComments" :comments="verse.comments" :verseId="verse.num"></comment-block>
+		<div v-if="showingComments">
+			<ul style="" class="post-buttons">
+				<li class="post-save">
+					<span v-if="verse.faved" class="post-save link" @click="unfaveVerse(verse)"><i class="fas fa-bookmark" /> unfave</span>
+					<span v-else class="post-save link" @click="faveVerse(verse)"><i class="far fa-bookmark" /> fave</span>
+				</li>
+				<li class="post-share">
+					<span class="post-share link" @click="shareVerse"><i class="fas fa-share-alt" /> share</span>
+				</li>
+				<li class="post-report-button">
+					<span class="post-report link" @click="reportVerse"><i class="fas fa-exclamation-triangle" /> report</span>
+				</li>
+			</ul>
+			<comment-block  :comments="verse.comments" :verseId="verse.num"></comment-block>
+		</div>
+
 		<!--
 		<div class="new-comment">
 			<div class="error-field" v-if="newComment.bodyError.length>0" v-html="newComment.bodyError"></div>

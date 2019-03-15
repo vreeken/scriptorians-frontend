@@ -1,5 +1,6 @@
 <template>
 	<div v-bind:class="[bgClass]" class="comment-group">
+		<div class="left-border-btn" v-bind:class="{'hidden': comment.children.length===0}" @click="toggleChildren()"></div>
 		<div class="post-comment">
 			<div class="comment-vote-btns gt-xs">
 				<div>
@@ -28,7 +29,8 @@
 		</div>
 		<comment-new v-if="replyToComment == comment" :parentComment="comment" @onSubmitCommentSuccess="onSubmitSuccess" @onSubmitCommentCancel="onSubmitCancel" :verseId="verseId"></comment-new>
 		<comment-edit v-if="editComment == comment" :comment="comment" :editComment="editComment" @onEditSuccess="editComment=false" @onEditCancel="editComment=false"></comment-edit>
-		<comment-list v-if="comment.children.length" v-bind:comments="comment.children" :verseId="verseId"></comment-list>
+		<comment-list v-show="showChildren" v-if="comment.children.length" v-bind:comments="comment.children" :verseId="verseId"></comment-list>
+		<div v-show="!showChildren" @click="toggleChildren()" class="bottom-border-minimized-children"><div>&hellip;</div></div>
 	</div>
 </template>
 
@@ -40,7 +42,8 @@ export default {
 		return {
 			replyToComment: false,
 			editComment: false,
-			bgClass: 'cg' + this.comment.depth % 5
+			bgClass: 'cg' + this.comment.depth % 5,
+			showChildren: true
 		}
 	},
 	props: ['comment', 'verseId'],
@@ -87,6 +90,9 @@ export default {
 					console.log(error);
 					window.rootVue.showError('Failed to vote. Please try again.');
 				});
+		},
+		toggleChildren: function() {
+			this.showChildren = !this.showChildren;
 		}
 	},
 	computed: {
