@@ -13,7 +13,7 @@ export default function(/* { ssrContext } */) {
 		state: {
 			logged_in: true,
 			user: {
-				username: 'Bob',
+				username: 'svenjoypro',
 				user_id: 1,
 				email: 'svenjoypro@gmail.com'
 			},
