@@ -55,7 +55,7 @@ export default {
 		fetchComments: function() {
 			const _this = this;
 
-			this.$axios.post(this.$urls.comments.get, {
+			this.$axios.post(this.$urls.chapterData.get, {
 				volume: this.volume.id,
 				book: this.book.id,
 				chapter: this.currChapterNumber

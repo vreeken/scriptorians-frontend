@@ -8,8 +8,10 @@ export default async({ Vue }) => {
 			scriptures: base + 'json/scriptures.json',
 			scriptures_summary: base + 'json/scriptures_summary.json'
 		},
+		chapterData: {
+			get: apiBase + 'chapter-data'
+		},
 		comments: {
-			get: apiBase + 'comments/get',
 			submit: apiBase + 'comments/new',
 			vote: apiBase + 'comments/vote'
 		},
